@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
-const repoBase = process.env.GITHUB_REPOSITORY?.split('/')[1];
+const repoBase = process.env.GITHUB_REPOSITORY?.split('/')[1] ?? 'Cadence';
 
 export default defineConfig({
   base: repoBase ? `/${repoBase}/` : '/',
