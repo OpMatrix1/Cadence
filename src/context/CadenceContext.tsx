@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { demoHabits, demoLogs, demoTasks } from '../lib/demoData';
-import { hasSupabaseConfig, supabase } from '../lib/supabase';
+import { authRedirectUrl, hasSupabaseConfig, supabase } from '../lib/supabase';
 import { todayISO } from '../lib/date';
 import type { Frequency, Habit, HabitLog, Priority, Task } from '../lib/types';
 
@@ -16,7 +16,7 @@ type CadenceState = {
   habits: Habit[];
   logs: HabitLog[];
   signIn: (email: string, password: string) => Promise<string | null>;
-  signUp: (email: string, password: string) => Promise<string | null>;
+  signUp: (name: string, email: string, password: string) => Promise<string | null>;
   sendEmailCode: (email: string) => Promise<string | null>;
   verifyEmailCode: (email: string, token: string) => Promise<string | null>;
   signOut: () => Promise<void>;
@@ -79,9 +79,16 @@ export function CadenceProvider({ children }: { children: React.ReactNode }) {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       return error?.message ?? null;
     };
-    const signUp = async (email: string, password: string) => {
+    const signUp = async (name: string, email: string, password: string) => {
       if (!supabase) return null;
-      const { error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin + window.location.pathname } });
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { full_name: name },
+          emailRedirectTo: authRedirectUrl()
+        }
+      });
       return error?.message ?? null;
     };
     const sendEmailCode = async (email: string) => {
@@ -90,7 +97,7 @@ export function CadenceProvider({ children }: { children: React.ReactNode }) {
         email,
         options: {
           shouldCreateUser: false,
-          emailRedirectTo: window.location.origin + window.location.pathname
+          emailRedirectTo: authRedirectUrl()
         }
       });
       return error?.message ?? null;
