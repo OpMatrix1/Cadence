@@ -17,6 +17,8 @@ type CadenceState = {
   logs: HabitLog[];
   signIn: (email: string, password: string) => Promise<string | null>;
   signUp: (email: string, password: string) => Promise<string | null>;
+  sendEmailCode: (email: string) => Promise<string | null>;
+  verifyEmailCode: (email: string, token: string) => Promise<string | null>;
   signOut: () => Promise<void>;
   addTask: (input: TaskInput) => Promise<void>;
   updateTask: (id: string, input: Partial<Task>) => Promise<void>;
@@ -79,7 +81,23 @@ export function CadenceProvider({ children }: { children: React.ReactNode }) {
     };
     const signUp = async (email: string, password: string) => {
       if (!supabase) return null;
-      const { error } = await supabase.auth.signUp({ email, password });
+      const { error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin + window.location.pathname } });
+      return error?.message ?? null;
+    };
+    const sendEmailCode = async (email: string) => {
+      if (!supabase) return null;
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          shouldCreateUser: false,
+          emailRedirectTo: window.location.origin + window.location.pathname
+        }
+      });
+      return error?.message ?? null;
+    };
+    const verifyEmailCode = async (email: string, token: string) => {
+      if (!supabase) return null;
+      const { error } = await supabase.auth.verifyOtp({ email, token, type: 'email' });
       return error?.message ?? null;
     };
     const signOut = async () => {
@@ -128,7 +146,7 @@ export function CadenceProvider({ children }: { children: React.ReactNode }) {
       setLogs((current) => [row, ...current]);
       if (supabase) await (supabase as any).from('habit_logs').insert([row]);
     };
-    return { session, demoMode, loading, tasks, habits, logs, signIn, signUp, signOut, addTask, updateTask, deleteTask, toggleTask, addHabit, updateHabit, deleteHabit, toggleHabitToday };
+    return { session, demoMode, loading, tasks, habits, logs, signIn, signUp, sendEmailCode, verifyEmailCode, signOut, addTask, updateTask, deleteTask, toggleTask, addHabit, updateHabit, deleteHabit, toggleHabitToday };
   }, [session, tasks, habits, logs, loading, demoMode]);
 
   return <CadenceContext.Provider value={value}>{children}</CadenceContext.Provider>;
