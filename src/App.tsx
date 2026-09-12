@@ -5,15 +5,16 @@ import { Dashboard } from './pages/Dashboard';
 import { Habits } from './pages/Habits';
 import { Tasks } from './pages/Tasks';
 import { Login } from './pages/Login';
+import { Welcome } from './pages/Welcome';
 
 function Shell() {
   const { session, demoMode, signOut } = useCadence();
   const navigate = useNavigate();
-  if (!session && !demoMode) return <Navigate to="/login" replace />;
+  if (!session && !demoMode) return <Navigate to="/" replace />;
 
   const logout = async () => {
     await signOut();
-    navigate('/login');
+    navigate('/');
   };
 
   return (
@@ -27,9 +28,9 @@ function Shell() {
           </div>
         </div>
         <nav className="grid grid-cols-3 gap-2 md:mt-10 md:flex md:flex-col">
-          <NavItem to="/" icon={<LayoutDashboard size={19} />} label="Today" />
-          <NavItem to="/habits" icon={<Flame size={19} />} label="Habits" />
-          <NavItem to="/tasks" icon={<CheckSquare size={19} />} label="Tasks" />
+          <NavItem to="/app" icon={<LayoutDashboard size={19} />} label="Today" />
+          <NavItem to="/app/habits" icon={<Flame size={19} />} label="Habits" />
+          <NavItem to="/app/tasks" icon={<CheckSquare size={19} />} label="Tasks" />
         </nav>
         <button onClick={logout} className="mt-6 hidden w-full items-center gap-2 rounded-md border border-ink/10 px-3 py-2 text-sm font-semibold text-slate hover:bg-white md:flex">
           <LogOut size={17} /> Sign out
@@ -59,8 +60,9 @@ export function App() {
   return (
     <CadenceProvider>
       <Routes>
+        <Route path="/" element={<Welcome />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/*" element={<Shell />} />
+        <Route path="/app/*" element={<Shell />} />
       </Routes>
     </CadenceProvider>
   );

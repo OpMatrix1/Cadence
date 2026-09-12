@@ -1,14 +1,15 @@
 import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate, useSearchParams } from 'react-router-dom';
 import { useCadence } from '../context/CadenceContext';
 
 export function Login() {
   const { session, demoMode, signIn, signUp } = useCadence();
+  const [searchParams] = useSearchParams();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [mode, setMode] = useState<'login' | 'signup'>('login');
+  const [mode, setMode] = useState<'login' | 'signup'>(searchParams.get('mode') === 'signup' ? 'signup' : 'login');
   const [error, setError] = useState<string | null>(null);
-  if (session || demoMode) return <Navigate to="/" replace />;
+  if (session || demoMode) return <Navigate to="/app" replace />;
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -18,7 +19,10 @@ export function Login() {
   return (
     <main className="grid min-h-screen place-items-center bg-fog px-4 text-ink">
       <section className="w-full max-w-md rounded-md bg-white p-6 shadow-soft">
-        <img src="cadence-logo.svg" className="mb-8 h-16 w-auto" alt="Cadence" />
+        <Link to="/" aria-label="Back to welcome">
+          <img src="cadence-logo.svg" className="mb-8 h-16 w-auto" alt="Cadence" />
+        </Link>
+        <h1 className="mb-4 font-display text-3xl font-bold">{mode === 'login' ? 'Welcome back' : 'Create your account'}</h1>
         <form className="grid gap-3" onSubmit={submit}>
           <input className="field" type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Email" required />
           <input className="field" type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Password" required minLength={6} />
