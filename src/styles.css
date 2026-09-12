@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Inter, sans-serif; background: #EFEAE2; }
+
+@layer components {
+  .panel { @apply rounded-md bg-white p-4 shadow-soft md:p-5; }
+  .section-title { @apply mb-4 font-display text-2xl font-semibold; }
+  .field { @apply min-h-12 w-full rounded-md border border-ink/15 bg-white px-3 py-2 text-sm text-ink outline-none focus:border-teal focus:ring-2 focus:ring-teal/20; }
+  .btn-primary { @apply min-h-12 rounded-md bg-amber px-4 py-2 text-sm font-bold text-ink transition hover:brightness-95; }
+  .item-row { @apply flex min-h-16 items-center gap-3 rounded-md border border-ink/10 bg-white px-3 py-3 transition hover:border-teal/50; }
+  .icon-btn { @apply grid h-10 w-10 shrink-0 place-items-center rounded-md border border-ink/10 bg-white text-ink transition hover:border-teal hover:text-teal; }
+  .tag { @apply rounded-md bg-fog px-2.5 py-1 text-xs font-bold uppercase text-slate; }
+  .priority-high { @apply bg-amber/20 text-ink; }
+  .priority-medium { @apply bg-teal/15 text-teal; }
+  .priority-low { @apply bg-fog text-slate; }
+}
+
+.heatmap {
+  display: grid;
+  grid-template-columns: repeat(18, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.heat {
+  aspect-ratio: 1;
+  min-width: 10px;
+  border-radius: 3px;
+  background: rgba(36, 30, 51, 0.08);
+}
+
+.heat.filled {
+  box-shadow: inset 0 0 0 1px rgba(36, 30, 51, 0.08);
+}
+
+@media (max-width: 540px) {
+  .heatmap { grid-template-columns: repeat(15, minmax(0, 1fr)); }
+}
