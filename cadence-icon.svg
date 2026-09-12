@@ -1,0 +1,18 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2B2440"/>
+      <stop offset="100%" stop-color="#1B1730"/>
+    </linearGradient>
+    <linearGradient id="barGrad" x1="50" y1="0" x2="149" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#4F8577"/>
+      <stop offset="100%" stop-color="#E8983D"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="42" fill="url(#bgGrad)"/>
+  <rect x="51" y="116" width="14" height="50" rx="7" fill="url(#barGrad)"/>
+  <rect x="79" y="86" width="14" height="80" rx="7" fill="url(#barGrad)"/>
+  <rect x="107" y="61" width="14" height="105" rx="7" fill="url(#barGrad)"/>
+  <rect x="135" y="41" width="14" height="125" rx="7" fill="url(#barGrad)"/>
+  <circle cx="142" cy="27" r="9" fill="#E8983D"/>
+</svg>
